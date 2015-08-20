@@ -38,5 +38,10 @@ public class AppsViewHolder extends RecyclerView.ViewHolder {
     public static void setupView(AppsViewHolder holder, Portfolio item) {
         Picasso.with(holder.image.getContext()).load(item.getIcon()).fit().into(holder.image);
         holder.title.setText(item.getName());
+        if(holder.getAdapterPosition() % 2 == 1)
+            holder.itemView.setBackgroundColor(holder.itemView.getResources().getColor(R.color.gray));
+        else
+            holder.itemView.setBackgroundColor(holder.itemView.getResources().getColor(R.color.white));
+
     }
 }

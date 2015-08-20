@@ -34,13 +34,6 @@ public class AppListFragment extends BaseFragment {
     @InjectView(R.id.swipe_refresh)
     SwipeRefreshLayout mSwipeRefresh;
 
-    List<Portfolio> mAppList;
-
-    public static Fragment getInstance() {
-        Fragment fragment = new AppListFragment();
-        return fragment;
-    }
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

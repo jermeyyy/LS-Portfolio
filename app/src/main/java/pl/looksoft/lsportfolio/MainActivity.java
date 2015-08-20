@@ -11,6 +11,7 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 import pl.looksoft.lsportfolio.base.BaseActivity;
 import pl.looksoft.lsportfolio.fragment.AppListFragment;
+import pl.looksoft.lsportfolio.fragment.ContactFragment;
 
 /**
  * Created by Jermey on 2015-08-18.
@@ -30,7 +31,7 @@ public class MainActivity extends BaseActivity{
         setContentView(R.layout.activity_main);
         ButterKnife.inject(this);
         if(savedInstanceState == null) {
-            getSupportFragmentManager().beginTransaction().replace(R.id.container, AppListFragment.getInstance()).commit();
+            getSupportFragmentManager().beginTransaction().replace(R.id.container, new AppListFragment()).commit();
         }
         setupDrawerContent(mNavigationView);
         setSupportActionBar(mToolbar);
@@ -59,10 +60,10 @@ public class MainActivity extends BaseActivity{
             menuItem.setChecked(true);
             switch (menuItem.getItemId()) {
                 case R.id.nav_apps:
-//                    getSupportFragmentManager().beginTransaction().replace(R.id.container, new AppListFragment()).commit();
+                    getSupportFragmentManager().beginTransaction().replace(R.id.container, new AppListFragment()).commit();
                     break;
                 case R.id.nav_contact:
-//                    getSupportFragmentManager().beginTransaction().replace(R.id.container, new ContactFragment()).commit();
+                    getSupportFragmentManager().beginTransaction().replace(R.id.container, new ContactFragment()).commit();
                     break;
             }
             mDrawerLayout.closeDrawers();
