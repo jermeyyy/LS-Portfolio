@@ -11,15 +11,16 @@ public class BaseResponse<DT> {
         return response;
     }
 
+
     public static class Response<DT> {
-        public int status;
+        public long status;
         public DT data;
 
-        public int getStatus() {
+        public long getStatus() {
             return status;
         }
 
-        public void setStatus(int status) {
+        public void setStatus(long status) {
             this.status = status;
         }
 

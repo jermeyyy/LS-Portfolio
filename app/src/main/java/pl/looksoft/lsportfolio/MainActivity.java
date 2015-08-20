@@ -4,19 +4,18 @@ import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+import pl.looksoft.lsportfolio.base.BaseActivity;
 import pl.looksoft.lsportfolio.fragment.AppListFragment;
-import pl.looksoft.lsportfolio.fragment.ContactFragment;
 
 /**
  * Created by Jermey on 2015-08-18.
  */
-public class MainActivity extends AppCompatActivity{
+public class MainActivity extends BaseActivity{
 
     @InjectView(R.id.drawer_layout)
     DrawerLayout mDrawerLayout;
@@ -31,7 +30,7 @@ public class MainActivity extends AppCompatActivity{
         setContentView(R.layout.activity_main);
         ButterKnife.inject(this);
         if(savedInstanceState == null) {
-            getSupportFragmentManager().beginTransaction().replace(R.id.container, new AppListFragment()).commit();
+            getSupportFragmentManager().beginTransaction().replace(R.id.container, AppListFragment.getInstance()).commit();
         }
         setupDrawerContent(mNavigationView);
         setSupportActionBar(mToolbar);
@@ -60,10 +59,10 @@ public class MainActivity extends AppCompatActivity{
             menuItem.setChecked(true);
             switch (menuItem.getItemId()) {
                 case R.id.nav_apps:
-                    getSupportFragmentManager().beginTransaction().replace(R.id.container, new AppListFragment()).commit();
+//                    getSupportFragmentManager().beginTransaction().replace(R.id.container, new AppListFragment()).commit();
                     break;
                 case R.id.nav_contact:
-                    getSupportFragmentManager().beginTransaction().replace(R.id.container, new ContactFragment()).commit();
+//                    getSupportFragmentManager().beginTransaction().replace(R.id.container, new ContactFragment()).commit();
                     break;
             }
             mDrawerLayout.closeDrawers();

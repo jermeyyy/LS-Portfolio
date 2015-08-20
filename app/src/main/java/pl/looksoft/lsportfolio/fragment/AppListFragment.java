@@ -1,6 +1,5 @@
 package pl.looksoft.lsportfolio.fragment;
 
-import android.accounts.OperationCanceledException;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -13,11 +12,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.squareup.okhttp.OkHttpClient;
-import com.squareup.okhttp.Request;
-import com.squareup.okhttp.Response;
-
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,6 +19,7 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 import pl.looksoft.lsportfolio.R;
 import pl.looksoft.lsportfolio.api.RestClient;
+import pl.looksoft.lsportfolio.fragment.base.BaseFragment;
 import pl.looksoft.lsportfolio.model.AppItem;
 import pl.looksoft.lsportfolio.model.BaseResponse;
 import pl.looksoft.lsportfolio.model.Portfolio;
@@ -33,7 +28,7 @@ import pl.looksoft.lsportfolio.util.AppsAdapter;
 /**
  * Created by Jermey on 2015-08-18.
  */
-public class AppListFragment extends Fragment {
+public class AppListFragment extends BaseFragment {
 
     @InjectView(R.id.recyclerview)
     RecyclerView mRecyclerView;
@@ -41,7 +36,11 @@ public class AppListFragment extends Fragment {
     SwipeRefreshLayout mSwipeRefresh;
 
     List<Portfolio> mAppList;
-    private OkHttpClient mHttpClient;
+
+    public static Fragment getInstance() {
+        Fragment fragment = new AppListFragment();
+        return fragment;
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -60,62 +59,44 @@ public class AppListFragment extends Fragment {
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-//        mSwipeRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-//            @Override
-//            public void onRefresh() {
-//                setupRecyclerView();
-//            }
-//        });
+        mSwipeRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                setupRecyclerView();
+            }
+        });
         setupRecyclerView();
-    }
-
-    private Response request(Request.Builder reqBuilder) throws IOException, OperationCanceledException {
-
-        mHttpClient = new OkHttpClient();
-        Request req = reqBuilder.build();
-
-        return mHttpClient.newCall(req).execute();
     }
 
 
 
     public void setupRecyclerView() {
 
-        AsyncTask<Void, Void, BaseResponse<AppItem>> task = new AsyncTask<Void, Void, BaseResponse<AppItem>>() {
+        registerTask(new AsyncTask<Void, Void, Void>() {
+            BaseResponse<AppItem> response;
 
             @Override
-            protected BaseResponse<AppItem> doInBackground(Void... params) {
-                BaseResponse<AppItem> response = null;
+            protected Void doInBackground(Void... params) {
                 try {
-                    Request.Builder rb = new Request.Builder();
-                    rb.url("http://looksoft.pl/api/main")
-                            .get();
-                    Response res = request(rb);
-                    String body = res.body().string();
-                    Log.d("RESBODY", res.body().string());
+                    response = RestClient.getInstance(getContext().getApplicationContext()).mService.getAppsList();
                 } catch (Exception e) {
                     Log.e("LSPortfolio", e.toString());
                 }
-                try{
-                    response = RestClient.getInstance(getActivity()).mService.getApps();
-                } catch (Exception e) {
-                    Log.e("LSPortfolio", e.toString());
-                }
-                return response;
+                return null;
             }
 
             @Override
-            protected void onPostExecute(BaseResponse<AppItem> result) {
+            protected void onPostExecute(Void result) {
                 super.onPostExecute(result);
-                if(result != null) {
-                    List<Portfolio> list = new ArrayList<>();
-                    list.addAll(result.getResponse().getData().getPortfolio());
-                    AppsAdapter appsAdapter = new AppsAdapter(list);
-                    mRecyclerView.setAdapter(appsAdapter);
-                }
+                if (response != null)
+                    if (response.getResponse() != null) {
+                        List<Portfolio> list = new ArrayList<>();
+                        list.addAll(response.getResponse().getData().getPortfolio());
+                        AppsAdapter appsAdapter = new AppsAdapter(list);
+                        mRecyclerView.setAdapter(appsAdapter);
+                    }
             }
 
-        };
-        task.execute();
+        }.execute());
     }
 }
