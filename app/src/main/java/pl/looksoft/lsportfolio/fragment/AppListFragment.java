@@ -12,7 +12,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.ButterKnife;
@@ -69,16 +68,20 @@ public class AppListFragment extends BaseFragment {
     }
 
 
-
     public void setupRecyclerView() {
 
-        registerTask(new AsyncTask<Void, Void, Void>() {
-            BaseResponse<AppItem> response;
+        registerTask(new AsyncTask<Void, BaseResponse<AppItem>, BaseResponse<AppItem>>() {
 
             @Override
-            protected Void doInBackground(Void... params) {
+            protected void onPreExecute() {
+                super.onPreExecute();
+                mRecyclerView.setAdapter(null);
+            }
+
+            @Override
+            protected BaseResponse<AppItem> doInBackground(Void... params) {
                 try {
-                    response = RestClient.getInstance(getContext().getApplicationContext()).mService.getAppsList();
+                    return RestClient.getInstance(getContext().getApplicationContext()).mService.getAppsList();
                 } catch (Exception e) {
                     Log.e("LSPortfolio", e.toString());
                 }
@@ -86,15 +89,13 @@ public class AppListFragment extends BaseFragment {
             }
 
             @Override
-            protected void onPostExecute(Void result) {
+            protected void onPostExecute(BaseResponse<AppItem> result) {
                 super.onPostExecute(result);
-                if (response != null)
-                    if (response.getResponse() != null) {
-                        List<Portfolio> list = new ArrayList<>();
-                        list.addAll(response.getResponse().getData().getPortfolio());
-                        AppsAdapter appsAdapter = new AppsAdapter(list);
-                        mRecyclerView.setAdapter(appsAdapter);
-                    }
+                if (result != null) {
+                    AppsAdapter appsAdapter = new AppsAdapter(result.getData().getPortfolio());
+                    mRecyclerView.setAdapter(appsAdapter);
+                    mSwipeRefresh.setRefreshing(false);
+                }
             }
 
         }.execute());

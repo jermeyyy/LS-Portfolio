@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/LSPortfolio.iml" filepath="$PROJECT_DIR$/LSPortfolio.iml" />
+      <module fileurl="file://$PROJECT_DIR$/LS-Portfolio.iml" filepath="$PROJECT_DIR$/LS-Portfolio.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
     </modules>
   </component>

@@ -1,5 +1,6 @@
 package pl.looksoft.lsportfolio.util;
 
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
@@ -9,6 +10,7 @@ import com.squareup.picasso.Picasso;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+import pl.looksoft.lsportfolio.DetailsActivity;
 import pl.looksoft.lsportfolio.R;
 import pl.looksoft.lsportfolio.model.Portfolio;
 
@@ -25,6 +27,12 @@ public class AppsViewHolder extends RecyclerView.ViewHolder {
     public AppsViewHolder(View itemView, int viewType) {
         super(itemView);
         ButterKnife.inject(this, itemView);
+        itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                v.getContext().startActivity(new Intent(v.getContext(), DetailsActivity.class).putExtra("appId", getItemId()));
+            }
+        });
     }
 
     public static void setupView(AppsViewHolder holder, Portfolio item) {

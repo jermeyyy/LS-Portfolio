@@ -2,16 +2,12 @@ package pl.looksoft.lsportfolio.api;
 
 import android.content.Context;
 
-import com.squareup.okhttp.OkHttpClient;
-
 import java.io.IOException;
-import java.util.concurrent.TimeUnit;
 
 import retrofit.ErrorHandler;
 import retrofit.RequestInterceptor;
 import retrofit.RestAdapter;
 import retrofit.RetrofitError;
-import retrofit.client.OkClient;
 import retrofit.converter.ConversionException;
 
 /**
@@ -22,6 +18,10 @@ public class RestClient {
     private static RestClient mInstance;
 
     private final static String API_ENDPOINT = "http://www.looksoft.pl";
+
+//    private final static String API_ENDPOINT = "http://test2.afterparty.pl/api/v1";
+
+//    private final static String AUTHORIZATION = "Basic cGFydHlfbmV3OldVcy1mVDJBcFI3RnhoRDE=";
 
     public ApiService mService;
 
@@ -61,20 +61,23 @@ public class RestClient {
     public RestClient(final Context context) {
         mContext = context;
 
-        OkHttpClient okHttpClient = new OkHttpClient();
-        okHttpClient.setConnectTimeout(60, TimeUnit.SECONDS);
-        okHttpClient.setReadTimeout(60, TimeUnit.SECONDS);
-        okHttpClient.setWriteTimeout(60, TimeUnit.SECONDS);
+//        OkHttpClient okHttpClient = new OkHttpClient();
+//        okHttpClient.setConnectTimeout(60, TimeUnit.SECONDS);
+//        okHttpClient.setReadTimeout(60, TimeUnit.SECONDS);
+//        okHttpClient.setWriteTimeout(60, TimeUnit.SECONDS);
+//        Gson gson = new Gson();
 
         RestAdapter restAdapter = new RestAdapter.Builder()
                 .setEndpoint(API_ENDPOINT)
                 .setLogLevel(RestAdapter.LogLevel.FULL)
                 .setErrorHandler(new ApiErrorHandler(context))
-                .setClient(new OkClient(okHttpClient))
+//                .setClient(new OkClient(okHttpClient))
+//                .setConverter(new GsonConverter(gson))
                 .setRequestInterceptor(new RequestInterceptor() {
                     @Override
                     public void intercept(RequestFacade request) {
                         request.addHeader("User-Agent", "Android");
+//                        request.addHeader("Authorization", AUTHORIZATION);
                     }
                 })
                 .build();
