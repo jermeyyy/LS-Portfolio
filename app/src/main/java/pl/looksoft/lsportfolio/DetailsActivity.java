@@ -1,11 +1,9 @@
 package pl.looksoft.lsportfolio;
 
 import android.content.Intent;
-import android.drm.DrmStore;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -14,6 +12,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
@@ -23,7 +22,6 @@ import java.util.List;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
-import butterknife.OnClick;
 import pl.looksoft.lsportfolio.api.RestClient;
 import pl.looksoft.lsportfolio.base.BaseActivity;
 import pl.looksoft.lsportfolio.model.AppDetail;
@@ -48,6 +46,7 @@ public class DetailsActivity extends BaseActivity{
     RecyclerView gallery;
     @InjectView(R.id.store_links)
     LinearLayout storeLinksContainer;
+    @InjectView(R.id.scrollview) ScrollView scrollView;
 
     List<Link> storeLinks = new ArrayList<>();
 
@@ -96,6 +95,7 @@ public class DetailsActivity extends BaseActivity{
                         storeLinksContainer.addView(v);
                         Picasso.with(v.getContext()).load(item.getImage()).into((ImageView) v);
                     }
+                    scrollView.fullScroll(ScrollView.FOCUS_UP);
                 }
             }
         }.execute());
